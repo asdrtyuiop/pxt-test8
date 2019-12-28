@@ -3,7 +3,7 @@
  */
 enum DCmotion {
 	//% block="ON"
-	OFF,
+	ON,
 	//% block="OFF"
 	OFF
 }
@@ -22,9 +22,15 @@ enum connectorDCMotor {
  */
 //% color=#5b99a5 weight=100 icon="\uf009" block="ArtecRobo"
 namespace artecrobo {
-	// LED 
+
+	/* spped initial value */
+	let speedM1 = 1023;
+	let speedM2 = 1023;
+	let state = DCmotion.Brake;
+
+	// Move DC motor
 	//% blockId=artec_move_dc_motor
-	//% block="LED %_connector| : %_motion"
+	//% block="DC motor %_connector| motion: %_motion"
 	export function moveDCMotor(_connector: connectorDCMotor, _motion: DCmotion): void {
 		switch(_motion) {
 			case DCmotion.ON:
@@ -32,7 +38,7 @@ namespace artecrobo {
 					pins.digitalWritePin(DigitalPin.P0, 1);
 				} else if (_connector == connectorDCMotor.P1) {
 					pins.digitalWritePin(DigitalPin.P1, 1);
-				} else {
+				}else {
 					pins.digitalWritePin(DigitalPin.P2, 1);
 				}
 				break;
@@ -41,10 +47,11 @@ namespace artecrobo {
 					pins.digitalWritePin(DigitalPin.P0, 0);
 				} else if (_connector == connectorDCMotor.P1) {
 					pins.digitalWritePin(DigitalPin.P1, 0);
-				} else {
+				}else {
 					pins.digitalWritePin(DigitalPin.P2, 0);
 				}
 				break;
 		}
+		state = _motion;
 	}
 }
